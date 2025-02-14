@@ -42,7 +42,7 @@ class TwoBucket {
     }
     solve() {
         const [moves, goalBucket, otherBucket] = this.solution; 
-        return { moves, goalBucket: buckets[goalBucket], otherBucket };
+        return { moves, goalBucket: buckets[goalBucket], otherBucket: otherBucket >>> 0 };
     }
 }
 
@@ -145,6 +145,30 @@ describe('TwoBucket', () => {
   describe('Goal larger than both buckets', () => {
     xtest('Is impossible', () => {
       expect(() => new TwoBucket(5, 7, 8, 'one')).toThrow();
+    });
+  });
+
+  describe('Measure using bucket one of size 2100000049 and bucket two of size 3300000077', () => {
+    const bucketOne = 2100000049;
+    const bucketTwo = 3300000077;
+    const goal = 600000014;
+
+    xtest('start with bucket one', () => {
+      const starterBucket = 'one';
+      const twoBucket = new TwoBucket(bucketOne, bucketTwo, goal, starterBucket);
+      const result = twoBucket.solve();
+      expect(result.moves).toEqual(14);
+      expect(result.goalBucket).toEqual('one');
+      expect(result.otherBucket).toEqual(3300000077);
+    });
+
+    xtest('start with bucket two', () => {
+      const starterBucket = 'two';
+      const twoBucket = new TwoBucket(bucketOne, bucketTwo, goal, starterBucket);
+      const result = twoBucket.solve();
+      expect(result.moves).toEqual(18);
+      expect(result.goalBucket).toEqual('two');
+      expect(result.otherBucket).toEqual(2100000049);
     });
   });
 });

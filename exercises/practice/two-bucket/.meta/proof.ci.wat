@@ -1,7 +1,7 @@
 (module
   (func $gcd (param $a i32) (param $b i32) (result i32)
     (if (i32.eqz (local.get $b)) (then (return (local.get $a))))
-    (call $gcd (local.get $b) (i32.rem_s (local.get $a) (local.get $b)))
+    (call $gcd (local.get $b) (i32.rem_u (local.get $a) (local.get $b)))
   )
 
   ;;
@@ -25,8 +25,8 @@
       (local.set $diff (local.get $bucketTwo))
       (local.set $bucketTwo (local.get $bucketOne))
       (local.set $bucketOne (local.get $diff))))
-    (if (i32.or (i32.and (i32.gt_s (local.get $goal) (local.get $bucketOne))
-      (i32.gt_s (local.get $goal) (local.get $bucketTwo)))
+    (if (i32.or (i32.and (i32.gt_u (local.get $goal) (local.get $bucketOne))
+      (i32.gt_u (local.get $goal) (local.get $bucketTwo)))
       (i32.rem_u (local.get $goal) (call $gcd (local.get $bucketOne) 
         (local.get $bucketTwo)))) (then
         (return (i32.const -1) (i32.const 0) (i32.const 0))))
@@ -42,7 +42,7 @@
           (local.set $diff (i32.sub (local.get $bucketTwo) (local.get $levelTwo)))
           (local.set $diff (select (local.get $levelOne)
             (local.get $diff)
-            (i32.lt_s (local.get $levelOne) (local.get $diff))))
+            (i32.lt_u (local.get $levelOne) (local.get $diff))))
           (local.set $levelOne (i32.sub (local.get $levelOne) (local.get $diff))
           (local.set $levelTwo (i32.add (local.get $levelTwo) (local.get $diff))))))))))
       (if (i32.eq (local.get $levelOne) (local.get $goal)) (then
